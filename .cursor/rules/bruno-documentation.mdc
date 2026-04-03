@@ -1,0 +1,29 @@
+---
+description: Manter bruno/README.md e requests .bru alinhados aos endpoints da API
+globs:
+  - src/**/*.routes.ts
+  - src/app.ts
+  - bruno/**/*
+alwaysApply: false
+---
+
+# Documentação Bruno
+
+Ao **adicionar, remover ou alterar** endpoints HTTP (caminho, método, auth, query, body ou formato de resposta), deixe a coleção Bruno e o índice em dia na **mesma alteração** (mesmo PR / mesmo passo).
+
+## O que atualizar
+
+1. **`bruno/README.md`** — tabela **Endpoints**: pasta da request, nome, método e caminho; se algo for exceção (ex.: só `/health` sem JWT), mantenha a nota explícita.
+2. **Requests `.bru`** — criar ou editar o arquivo correspondente em `bruno/` (URL, método, `params:path` / `params:query`, `headers`, corpo JSON de exemplo).
+3. **Variáveis de ambiente** — se surgir variável nova usada nas requests, documentar na tabela de `bruno/.env` em `bruno/README.md` e incluir chave em `bruno/.env.example` (sem comentários no arquivo, só `CHAVE=valor`).
+
+## Contrato da API
+
+- Respostas e erros devem refletir o que o código realmente devolve (status, envelope `{ data }`, paginação, etc.).
+- Query/body obrigatórios ou validados (Zod) devem aparecer nos exemplos Bruno ou na descrição da tabela quando couber.
+
+## Checklist rápido
+
+- [ ] Tabela em `bruno/README.md` bate com as rotas atuais.
+- [ ] Existe request `.bru` executável para o fluxo novo ou alterado.
+- [ ] `Authorization` e `baseUrl` seguem o padrão das outras requests autenticadas.

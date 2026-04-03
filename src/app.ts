@@ -2,7 +2,6 @@ import express from 'express';
 import 'express-async-errors';
 import cors from 'cors';
 import { productRoutes } from './modules/products/product.routes.js';
-import { movementRoutes } from './modules/inventory-movements/movement.routes.js';
 import { errorHandler } from './shared/middlewares/errorHandler.js';
 import { authMiddleware } from './shared/middlewares/auth.js';
 
@@ -20,7 +19,6 @@ export function createApp() {
   });
 
   app.use('/products', authMiddleware, productRoutes);
-  app.use('/movements', authMiddleware, movementRoutes);
 
   app.use((_req, res) => {
     res.status(404).json({

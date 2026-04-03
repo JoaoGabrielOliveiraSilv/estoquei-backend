@@ -1,0 +1,18 @@
+---
+description: Proíbe comentários óbvios, didáticos ou que repetem o código
+alwaysApply: true
+---
+
+# Comentários
+
+Não adicione comentários que:
+
+- apenas repetem o que o nome do símbolo ou o código já deixa claro;
+- explicam “como usar” o arquivo (isso vai em documentação externa se necessário);
+- são tutoriais em `.env.example`, `docker-compose`, YAML ou similares.
+
+Em `.env` / `.env.example`, use só pares `CHAVE=valor`, sem linhas de comentário, salvo exigência legal ou convenção do time documentada fora do arquivo.
+
+Em TypeScript, evite JSDoc e comentários de bloco salvo para APIs públicas de biblioteca ou invariantes que não podem ser expressos em tipos.
+
+Prefira código autoexplicativo a comentário.

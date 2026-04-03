@@ -5,7 +5,10 @@ import { Product } from '../shared/product.entity.js';
 import type { CreateProductDTO, UpdateProductDTO } from '../shared/product.dto.js';
 
 export interface IProductRepository {
-  findAll(db?: DatabaseClient): Promise<Product[]>;
+  findPaginated(
+    params: { page: number; limit: number },
+    db?: DatabaseClient,
+  ): Promise<{ items: Product[]; total: number }>;
   findById(id: string, db?: DatabaseClient): Promise<Product | null>;
   create(data: CreateProductDTO, db?: DatabaseClient): Promise<Product>;
   update(id: string, data: UpdateProductDTO, db?: DatabaseClient): Promise<Product>;
@@ -21,10 +24,24 @@ export class ProductRepository
     super(prisma);
   }
 
-  async findAll(db?: DatabaseClient): Promise<Product[]> {
+  async findPaginated(
+    params: { page: number; limit: number },
+    db?: DatabaseClient,
+  ): Promise<{ items: Product[]; total: number }> {
     const client = this.resolveDb(db);
-    const rows = await client.product.findMany({ orderBy: { createdAt: 'desc' } });
-    return rows.map((row) => Product.fromPrisma(row));
+    const skip = (params.page - 1) * params.limit;
+    const [rows, total] = await Promise.all([
+      client.product.findMany({
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: params.limit,
+      }),
+      client.product.count(),
+    ]);
+    return {
+      items: rows.map((row: Parameters<typeof Product.fromPrisma>[0]) => Product.fromPrisma(row)),
+      total,
+    };
   }
 
   async findById(id: string, db?: DatabaseClient): Promise<Product | null> {

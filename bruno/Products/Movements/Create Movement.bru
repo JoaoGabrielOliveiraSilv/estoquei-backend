@@ -1,12 +1,17 @@
 meta {
   name: Create Movement
   type: http
-  seq: 3
+  seq: 7
 }
 
 post {
-  url: {{baseUrl}}/movements
+  url: {{baseUrl}}/products/:productId/movements
+  body: json
   auth: none
+}
+
+params:path {
+  productId: 1f059f17-2584-4d0b-8fa0-00f2b71b8a5b
 }
 
 headers {
@@ -14,9 +19,8 @@ headers {
   Authorization: Bearer {{jwt}}
 }
 
-body {
+body:json {
   {
-    "productId": "{{productId}}",
     "type": "inbound",
     "quantity": 12,
     "counterPartyName": "Supplier ACME",

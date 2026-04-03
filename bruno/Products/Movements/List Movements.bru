@@ -1,13 +1,17 @@
 meta {
   name: List Movements
   type: http
-  seq: 1
+  seq: 6
 }
 
 get {
-  url: {{baseUrl}}/movements
+  url: {{baseUrl}}/products/:productId/movements
   body: none
   auth: none
+}
+
+params:path {
+  productId: 1f059f17-2584-4d0b-8fa0-00f2b71b8a5b
 }
 
 headers {
