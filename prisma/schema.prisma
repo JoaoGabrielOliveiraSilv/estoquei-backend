@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String              @id @default(uuid())
+  name        String
+  description String?
+  imageUrl    String?
+  emoji       String
+  quantity    Int                 @default(0)
+  status      String              @default("normal")
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  movements   InventoryMovement[]
+}
+
+model InventoryMovement {
+  id               Int      @id @default(autoincrement())
+  productId        String
+  type             String
+  quantity         Int
+  counterPartyName String
+  date             String
+  createdAt        DateTime @default(now())
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
