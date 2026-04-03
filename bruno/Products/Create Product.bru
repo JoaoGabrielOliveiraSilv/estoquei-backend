@@ -1,0 +1,26 @@
+meta {
+  name: Create Product
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/products
+  auth: none
+}
+
+headers {
+  content-type: application/json
+  Authorization: Bearer {{jwt}}
+}
+
+body {
+  {
+    "name": "Sample Lager",
+    "description": "House draft",
+    "imageUrl": "https://example.com/lager.png",
+    "emoji": "🍺",
+    "quantity": 24,
+    "status": "normal"
+  }
+}

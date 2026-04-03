@@ -1,0 +1,25 @@
+meta {
+  name: Create Movement
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/movements
+  auth: none
+}
+
+headers {
+  content-type: application/json
+  Authorization: Bearer {{jwt}}
+}
+
+body {
+  {
+    "productId": "{{productId}}",
+    "type": "inbound",
+    "quantity": 12,
+    "counterPartyName": "Supplier ACME",
+    "date": "2026-04-03"
+  }
+}

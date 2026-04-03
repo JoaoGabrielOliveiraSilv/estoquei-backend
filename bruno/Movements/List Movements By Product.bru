@@ -1,0 +1,19 @@
+meta {
+  name: List Movements By Product
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/movements
+  body: none
+  auth: none
+}
+
+params:query {
+  productId: {{productId}}
+}
+
+headers {
+  Authorization: Bearer {{jwt}}
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Update Product
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/products/:id
+  auth: none
+}
+
+params:path {
+  id: {{productId}}
+}
+
+headers {
+  content-type: application/json
+  Authorization: Bearer {{jwt}}
+}
+
+body {
+  {
+    "quantity": 30,
+    "status": "warning"
+  }
+}
