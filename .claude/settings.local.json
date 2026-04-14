@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.json$|\\\\.yml$|\\\\.yaml$|prisma\")",
+      "Bash(npm install:*)",
+      "Bash(npx vitest:*)"
+    ]
+  }
+}
