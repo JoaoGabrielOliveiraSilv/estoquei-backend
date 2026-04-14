@@ -9,6 +9,6 @@ export class CreateProductService extends AbstractService<[CreateProductDTO], Pr
   }
 
   override async execute(data: CreateProductDTO): Promise<Product> {
-    return this.productRepository.create(data);
+    return this.productRepository.create({ ...data, quantity: 0, status: 'danger' });
   }
 }

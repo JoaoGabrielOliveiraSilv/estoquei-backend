@@ -13,8 +13,6 @@ export const createProductSchema = z.object({
   description: z.string().max(2000).optional().nullable(),
   imageUrl: optionalUrlOrEmpty,
   emoji: z.string().min(1).max(16),
-  quantity: z.coerce.number().int().min(0).optional().default(0),
-  status: productStatusSchema.optional().default('normal'),
 });
 
 export type CreateProductDTO = z.infer<typeof createProductSchema>;
@@ -25,8 +23,6 @@ export const updateProductSchema = z
     description: z.string().max(2000).optional().nullable(),
     imageUrl: optionalUrlOrEmpty,
     emoji: z.string().min(1).max(16).optional(),
-    quantity: z.coerce.number().int().min(0).optional(),
-    status: productStatusSchema.optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'At least one field is required',

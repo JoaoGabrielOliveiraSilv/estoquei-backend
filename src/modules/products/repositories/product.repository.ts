@@ -1,8 +1,7 @@
-import type { PrismaClient } from '@prisma/client';
+import type { Prisma, PrismaClient } from '@prisma/client';
 import type { DatabaseClient } from '../../../shared/database/types.js';
 import { AbstractRepository } from '../../../shared/base/abstract.repository.js';
-import { Product } from '../shared/product.entity.js';
-import type { CreateProductDTO, UpdateProductDTO } from '../shared/product.dto.js';
+import { Product, ProductStatus } from '../shared/product.entity.js';
 
 export interface IProductRepository {
   findPaginated(
@@ -10,16 +9,15 @@ export interface IProductRepository {
     db?: DatabaseClient,
   ): Promise<{ items: Product[]; total: number }>;
   findById(id: string, db?: DatabaseClient): Promise<Product | null>;
-  create(data: CreateProductDTO, db?: DatabaseClient): Promise<Product>;
-  update(id: string, data: UpdateProductDTO, db?: DatabaseClient): Promise<Product>;
+  create(data: Prisma.ProductCreateInput, db?: DatabaseClient): Promise<Product>;
+  update(id: string, data: Prisma.ProductUpdateInput, db?: DatabaseClient): Promise<Product>;
   delete(id: string, db?: DatabaseClient): Promise<void>;
-  setQuantity(id: string, quantity: number, db?: DatabaseClient): Promise<Product>;
+  setQuantity(id: string, data: { quantity: number, status: ProductStatus }, db?: DatabaseClient): Promise<Product>;
 }
 
 export class ProductRepository
   extends AbstractRepository<IProductRepository>
-  implements IProductRepository
-{
+  implements IProductRepository {
   constructor(prisma: PrismaClient) {
     super(prisma);
   }
@@ -50,7 +48,7 @@ export class ProductRepository
     return row === null ? null : Product.fromPrisma(row);
   }
 
-  async create(data: CreateProductDTO, db?: DatabaseClient): Promise<Product> {
+  async create(data: Prisma.ProductCreateInput, db?: DatabaseClient): Promise<Product> {
     const client = this.resolveDb(db);
     const row = await client.product.create({
       data: {
@@ -65,7 +63,7 @@ export class ProductRepository
     return Product.fromPrisma(row);
   }
 
-  async update(id: string, data: UpdateProductDTO, db?: DatabaseClient): Promise<Product> {
+  async update(id: string, data: Prisma.ProductUpdateInput, db?: DatabaseClient): Promise<Product> {
     const client = this.resolveDb(db);
     const row = await client.product.update({
       where: { id },
@@ -86,11 +84,15 @@ export class ProductRepository
     await client.product.delete({ where: { id } });
   }
 
-  async setQuantity(id: string, quantity: number, db?: DatabaseClient): Promise<Product> {
+  async setQuantity(
+    id: string,
+    { quantity, status }: { quantity: number, status: ProductStatus },
+    db?: DatabaseClient
+  ): Promise<Product> {
     const client = this.resolveDb(db);
     const row = await client.product.update({
       where: { id },
-      data: { quantity },
+      data: { quantity, status },
     });
     return Product.fromPrisma(row);
   }
